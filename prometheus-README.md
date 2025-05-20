@@ -1,8 +1,8 @@
-Prometheus Monitoring Stack with cAdvisor, Node Exporter, and Grafana
+Prometheus and Grafana Monitoring Stack with cAdvisor, Node Exporter, 
 =====================================================================
 
 معرفی پروژه  
-این پروژه شامل یک ستاپ مانیتورینگ کامل با استفاده از Prometheus، cAdvisor، Node Exporter و Grafana است که توسط Docker Compose اجرا می‌شود.  
+این پروژه شامل یک ستاپ مانیتورینگ  با استفاده از Prometheus، cAdvisor، Node Exporter و Grafana است که توسط Docker Compose اجرا می‌شود.  
 Prometheus داده‌های مانیتورینگ را از cAdvisor و Node Exporter جمع‌آوری می‌کند و Grafana امکان مشاهده و تحلیل این داده‌ها را فراهم می‌کند.
 
 ---
@@ -70,6 +70,3 @@ prometheus/
 - داده‌ها هر ۱۵ ثانیه جمع‌آوری می‌شوند و می‌توانید داشبورد Grafana را برای نمایش بهتر داده‌ها شخصی‌سازی کنید.  
 - برای امنیت بیشتر، پیشنهاد می‌شود دسترسی‌ها و یوزرنیم/پسوردها را در محیط تولید تغییر دهید.
 
----
-
-اگر سوالی داشتی یا کمک خواستی، خوشحال می‌شم کمکت کنم!
