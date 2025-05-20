@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  reverse-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: reverse-proxy
+    networks:
+      - frontend
+    ports:
+      - "80:80"
+      - "443:443"
+
+networks:
+  frontend:
+    external: true

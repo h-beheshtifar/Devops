@@ -1,0 +1,22 @@
+version: '3.8'
+
+
+services:
+  ftp:
+    image: bogem/ftp:latest
+    container_name: ftp_server
+    environment:
+      FTP_USER: ${FTP_USER}
+      FTP_PASS: ${FTP_PASS}
+      PASV_ENABLE: "YES"
+      PASV_ADDRESS: "172.30.255.169"
+      PASV_MIN_PORT: 47400
+      PASV_MAX_PORT: 47470
+    ports:
+      - "21:21"
+      - "47400-47470:47400-47470"
+    volumes:
+      - /var/log/myapp_ftp:/home/vsftpd
+      - ./vsftpd.conf:/etc/vsftpd.conf
+    restart: unless-stopped
+

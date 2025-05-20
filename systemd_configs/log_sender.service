@@ -1,0 +1,13 @@
+[Unit]
+Description=MyApp Logger Script
+
+[Service]
+ExecStart=/root/task/log/log_sender.sh
+Restart=always
+User=root
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target
+

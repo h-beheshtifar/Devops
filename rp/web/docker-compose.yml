@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  site1:
+    image: nginx:alpine
+    container_name: site1
+    networks:
+      - frontend
+    volumes:
+      - ./shared-site:/usr/share/nginx/html:ro
+
+  site2:
+    image: nginx:alpine
+    container_name: site2
+    networks:
+      - frontend
+    volumes:
+      - ./shared-site:/usr/share/nginx/html:ro
+
+
+networks:
+  frontend:
+    external: true
