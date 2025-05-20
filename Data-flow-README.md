@@ -4,12 +4,6 @@
 
 ---
 
-ساختار دایرکتوری
-
-log/
-├── log_sender.sh          # اسکریپت Bash تولید و ارسال لاگ
-└── log_sender.service     # فایل سرویس systemd برای اجرای اسکریپت
-
 
 
 توضیح فایل‌ها
@@ -80,14 +74,6 @@ rsyslog_config/
 
 ---
 
-ساختار دایرکتوری
-
-ftp/
-├── docker-compose.yml   # تعریف سرویس FTP با Docker Compose
-├── .env                 # متغیرهای محیطی شامل نام کاربری و پسورد FTP
-└── vsftpd.conf          # فایل تنظیمات سرویس vsftpd
-
----
 
 توضیح فایل‌ها
 
