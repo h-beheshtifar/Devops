@@ -1,0 +1,81 @@
+---
+- name: Deploy ELK, FTP, Kafka and Prometheus stacks with docker-compose and check container status
+  hosts: localhost
+  become: yes
+  collections:
+    - community.docker
+
+  vars:
+    services:
+      - name: elasticsearch
+        project_src: /root/task/elk
+      - name: kibana
+        project_src: /root/task/elk
+      - name: logstash
+        project_src: /root/task/elk
+      - name: ftp_server
+        project_src: /root/task/ftp
+      - name: kafka_broker
+        project_src: /root/task/kafka
+      - name: akhq
+        project_src: /root/task/kafka
+      - name: prometheus
+        project_src: /root/prom
+      - name: cadvisor
+        project_src: /root/prom
+      - name: grafana
+        project_src: /root/prom
+
+  tasks:
+
+    - name: Ensure docker network 'kafka-net' exists
+      community.docker.docker_network:
+        name: kafka-net
+        state: present
+
+    - name: Ensure docker network 'elk-net' exists
+      community.docker.docker_network:
+        name: elk-net
+        state: present
+
+    - name: Deploy ELK stack containers (elasticsearch, kibana, logstash)
+      community.docker.docker_compose_v2:
+        project_src: /root/task/elk
+        state: present
+
+    - name: Deploy FTP container
+      community.docker.docker_compose_v2:
+        project_src: /root/task/ftp
+        state: present
+
+    - name: Deploy Kafka stack containers (kafka, akhq)
+      community.docker.docker_compose_v2:
+        project_src: /root/task/kafka
+        state: present
+
+    - name: Deploy Prometheus stack containers (prometheus, cadvisor, grafana)
+      community.docker.docker_compose_v2:
+        project_src: /root/prom
+        state: present
+
+    - name: Check container status
+      block:
+        - name: Get container info for {{ item.name }}
+          community.docker.docker_container_info:
+            name: "{{ item.name }}"
+          register: container_info
+          ignore_errors: yes
+          loop: "{{ services }}"
+          loop_control:
+            label: "{{ item.name }}"
+
+        - name: Show container statuses
+          debug:
+            msg: >-
+              {% for c in container_info.results %}
+              Container {{ c.invocation.module_args.name }} is {{
+                'running' if
+                c.container is defined and c.container.State.Running
+                else 'NOT running or not found'
+              }}
+              {% endfor %}

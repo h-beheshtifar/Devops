@@ -1,0 +1,48 @@
+---
+- name: Deploy multi-container nginx + reverse proxy with docker-compose v2
+  hosts: localhost
+  become: yes
+  collections:
+    - community.docker
+
+  tasks:
+
+    - name: Ensure docker network 'frontend' exists
+      community.docker.docker_network:
+        name: frontend
+        state: present
+
+    - name: Deploy web containers (site1 and site2)
+      community.docker.docker_compose_v2:
+        project_src: /root/rp/web
+        state: present
+
+    - name: Deploy reverse proxy container
+      community.docker.docker_compose_v2:
+        project_src: /root/rp/proxy
+        state: present
+
+    - name: Check site1 container status
+      community.docker.docker_container_info:
+        name: site1
+      register: site1_info
+      ignore_errors: yes
+
+    - name: Check site2 container status
+      community.docker.docker_container_info:
+        name: site2
+      register: site2_info
+      ignore_errors: yes
+
+    - name: Check reverse-proxy container status
+      community.docker.docker_container_info:
+        name: reverse-proxy
+      register: proxy_info
+      ignore_errors: yes
+
+    - name: Show container statuses
+      debug:
+        msg: >-
+          site1 container is {{ 'running' if site1_info.container.State.Running else 'NOT running' }}
+          site2 container is {{ 'running' if site2_info.container.State.Running else 'NOT running' }}
+          reverse-proxy container is {{ 'running' if proxy_info.container.State.Running else 'NOT running' }}

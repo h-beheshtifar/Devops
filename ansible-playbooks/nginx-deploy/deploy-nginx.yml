@@ -1,0 +1,28 @@
+---
+- name: Deploy nginx container with docker-compose v2
+  hosts: localhost
+  become: yes
+  collections:
+    - community.docker
+
+  tasks:
+    - name: Run docker-compose v2 to start nginx
+      community.docker.docker_compose_v2:
+        project_src: /root/senario/nginx-compose
+        state: present
+
+    - name: Get info about nginx container
+      community.docker.docker_container_info:
+        name: ngiinx
+      register: nginx_info
+      ignore_errors: yes
+
+    - name: Show if nginx container is running or not
+      debug:
+        msg: >-
+          {% if nginx_info.container and nginx_info.container.State.Running %}
+          nginx container is running
+          {% else %}
+          nginx container is NOT running
+          {% endif %}
+
